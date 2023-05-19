@@ -1,0 +1,59 @@
+"""
+Given a file containing text. Complete using only default collections:
+    1) Find 10 longest words consisting from 'largest amount of unique symbols
+    2) Find 'rarest' symbol for document
+    3) Count every punctuation char
+    4) Count every non ascii char
+    5) Find most common non ascii char for document
+"""
+from typing import List
+
+
+def get_longest_diverse_words(file_path: str) -> List[str]:
+    with open(file_path, encoding='utf-8', mode='r') as fi:  # Opens the file in read mode with utf-8 encoding
+        text = fi.read().encode('utf-8').decode('unicode-escape')
+        words = text.split(' ')  # Splits the text into individual words and stores them in a list called words
+        finale_list = sorted(words, key=lambda x: len(set(x)),
+                             reverse=True)  # Sorts the list of words in descending order
+# based on the number of unique characters in each word, using a lambda function to extract this count for each word
+        finale_list = finale_list[:10]  # Takes the first 10 words from the sorted list and stores them back in finale_list
+    return finale_list
+
+
+def get_rarest_char(file_path: str) -> str: # The function definition takes a file path as input and returns the rarest character in the file
+    with open(file_path, encoding='utf-8', mode='r') as file:    # Opens the file in read mode with utf-8 encoding
+        counter = Counter(file.read().encode('utf-8').decode('unicode-escape'))   # Initializes a Counter object called counter to count the frequency of each character in the text
+    rare_letter = min(counter, key=counter.get) # Finds the rarest letter by finding the key with the minimum value in the counter dictionary.
+    return rare_letter  # Returns the rarest letter.
+
+
+def count_punctuation_chars(file_path: str) -> int: # The function definition takes a file path as input and returns the number of punctuation characters in the file
+    with open(file_path, encoding='utf-8', mode='r') as file:  # Opens the file in read mode with utf-8 encoding and stores it in a file object called file
+        text = file.read().encode('utf-8').decode('unicode-escape')  # Reads the contents of the file, converts Unicode escape sequences to their corresponding characters, and stores the resulting string in a variable called text
+        string_without_letter = re.sub(r'[^!.,?:;\-\(\)\"\"]', '', text)     # Removes all characters from the text that are not punctuation marks using a regular expression and stores the resulting string in a variable called string_without_letter.
+        quantity = len(string_without_letter) # Calculates the length of string_without_letter and stores the result in a variable called quantity.
+        return quantity
+
+
+def count_non_ascii_chars(file_path: str) -> int:
+    with open('TASK\data.txt', mode='r') as file:
+        with open(file_path, mode='r') as file: # Opens the file specified by the file_path parameter in read mode and stores it in a file object called file
+            text = file.read().encode('utf-8').decode('unicode-escape')
+            c = 0
+            for i in text:
+                if i.isascii():  # Checks if the character is an ASCII character using the isascii() method
+                    c += 1
+            return c
+
+
+def get_most_common_non_ascii_char(file_path: str) -> str:
+    with open('TASK\data.txt', mode='r') as file:
+        with open(file_path, mode='r') as file:
+            text = file.read().encode('utf-8').decode('unicode-escape')
+            ascii_simbols = ''
+            for i in text:
+                if not i.isascii():
+                    ascii_simbols += i
+            counter = Counter(ascii_simbols)  
+            most_common_letter = max(counter, key=counter.get)
+            return most_common_letter
