@@ -1,0 +1,5 @@
+def my_precious_logger(line: str) -> None:
+        if line.startswith("error"):
+            sys.stderr.write(line)
+        else:
+            sys.stdout.write(line)
