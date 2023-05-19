@@ -1,0 +1,5 @@
+def is_armstrong_number(num: int) -> bool:
+        digits = list(map(int, str(num)))
+        num_digits = len(digits)
+        powered_digits_sum = reduce(lambda x, y: x + y ** num_digits, digits, 0)
+        return powered_digits_sum == num
