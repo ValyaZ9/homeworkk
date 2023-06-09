@@ -1,0 +1,43 @@
+from pathlib import Path
+from heapq import merge
+from typing import List, Union, Iterator
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def merge_files(file_list: List[Union[str, Path]]) -> Iterator[int]:
+    """
+    Merges the contents of multiple files and returns an iterator of sorted integers.
+
+    :param file_list: List of file paths to be merged.
+    :type file_list: List[Union[str, Path]]
+    :return: Iterator of sorted integers.
+    :rtype: Iterator[int]
+    """
+    
+    # Open file handles for each file in file_list
+    file_handles = []
+    for file_path in file_list:
+        try:
+            file_handles.append(open(str(file_path), 'r'))
+        except FileNotFoundError:
+            logger.error("File not found: %s", file_path)
+            raise
+    
+    try:
+        # Create iterators for each file handle
+        file_iters = [map(lambda x: int(x.strip()), fh) for fh in file_handles]
+        
+        # Merge iterators using heapq.merge
+        merged_iter = merge(*file_iters)
+        
+        # Log successful merge
+        logger.info("Files merged successfully.")
+        
+        return merged_iter
+    
+    finally:
+        # Close all file handles
+        for fh in file_handles:
+            fh.close()
