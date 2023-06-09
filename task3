@@ -1,0 +1,26 @@
+from typing import List
+
+def tic_tac_toe_checker(board: List[List]) -> str:
+    for symbol in ['x', 'o']:
+        # check rows
+        for i in range(3):
+            if all(board[i][j] == symbol for j in range(3)):
+                return f"{symbol} wins!"
+        # check columns
+        for j in range(3):
+            if all(board[i][j] == symbol for i in range(3)):
+                return f"{symbol} wins!"
+        # check diagonals
+        if all(board[i][i] == symbol for i in range(3)):
+            return f"{symbol} wins!"
+        if all(board[i][2-i] == symbol for i in range(3)):
+            return f"{symbol} wins!"
+
+    if all(all(cell != '-' for cell in row) for row in board):
+        return "draw!"
+    else:
+        return "unfinished!"
+
+
+board1 = [['-', '-', 'o'], ['-', 'x', 'o'], ['x', 'o', 'x']]
+board2 = [['-', '-', 'o'], ['-', 'o', 'o'], ['x', 'x', 'x']]
