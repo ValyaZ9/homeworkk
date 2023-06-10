@@ -1,0 +1,14 @@
+from pathlib import Path
+from typing import Optional, Callable
+
+def universal_file_counter(dir_path: Path, file_extension: str, tokenizer: Optional[Callable] = None) -> int:
+    total_count = 0
+    for file_path in dir_path.glob(f"*.{file_extension}"):
+        with file_path.open() as f:
+            if tokenizer is None:
+                # Count lines
+                total_count += sum(1 for line in f)
+            else:
+                # Count tokens using tokenizer
+                total_count += sum(1 for line in f for _ in tokenizer(line))
+    return total_count
